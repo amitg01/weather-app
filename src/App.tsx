@@ -1,11 +1,10 @@
 import './App.css'
 import { ErrorBoundary } from 'react-error-boundary'
-
-const Error = () => <p>Error</p>
+import { Error, ErrorHandler } from './components/Error'
 
 function App() {
   return (
-    <ErrorBoundary FallbackComponent={Error} onError={(e) => console.error(e)}>
+    <ErrorBoundary FallbackComponent={Error} onError={ErrorHandler}>
       <div className='App'>This is going to be a weather app</div>
     </ErrorBoundary>
   )
