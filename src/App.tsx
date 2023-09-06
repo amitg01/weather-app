@@ -1,26 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import { ErrorBoundary } from 'react-error-boundary'
+
+const Error = () => <p>Error</p>
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ErrorBoundary FallbackComponent={Error} onError={(e) => console.error(e)}>
+      <div className='App'>This is going to be a weather app</div>
+    </ErrorBoundary>
+  )
 }
 
-export default App;
+export default App
