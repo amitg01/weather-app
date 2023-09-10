@@ -7,6 +7,7 @@ import { CurrentWeatherModel, EmptyCurrentWeather, SettingsModel } from '../../m
 import { useWeather } from '../../hooks/useWeather'
 import CurrentWeather from '../CurrentWeather'
 import CurrentWeatherDetails from '../CurrentWeatherDetails'
+import Hourly from '../Hourly'
 
 type ContainerProps = {
   settings: SettingsModel
@@ -38,7 +39,7 @@ const Container = ({ settings, changeSettings }: ContainerProps) => {
 
   return (
     <div className='container'>
-      <Loading isLoading={false}>
+      <Loading isLoading={isLoading}>
         <div className='grid-container'>
           <Header
             locality={location.locality}
@@ -50,6 +51,7 @@ const Container = ({ settings, changeSettings }: ContainerProps) => {
           />
           <CurrentWeather settings={settings} data={currentWeatherSelectedItem} />
           <CurrentWeatherDetails data={currentWeatherSelectedItem.details} />
+          <Hourly settings={settings} data={hourlyWeather} clickHandler={hourlyItemClickHandler} />
         </div>
       </Loading>
     </div>
