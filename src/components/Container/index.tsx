@@ -18,12 +18,10 @@ type ContainerProps = {
 const Container = ({ settings, changeSettings }: ContainerProps) => {
   const [currentLocationName, setCurrentLocationName] = useState<string>('')
   const [currentWeatherSelectedItem, setCurrentWeatherSelectedItem] = useState(EmptyCurrentWeather)
-  const useMockData: boolean = false
 
   const { isLoading, location, currentWeather, hourlyWeather, dailyWeather } = useWeather(
     currentLocationName,
     settings.unit,
-    useMockData,
   )
 
   useEffect(() => {

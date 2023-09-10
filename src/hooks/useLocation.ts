@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { EmptyLocationModel, LocationModel } from '../models'
 
-export const useLocation = (locationName: string, useMockData: boolean) => {
+export const useLocation = (locationName: string) => {
   const apiKey = process.env.REACT_APP_GEOLOCATION_API_KEY
   const geocodeBaseUrl = process.env.REACT_APP_GEOLOCATION_GEOCODE_BASEURL
 
@@ -12,9 +12,7 @@ export const useLocation = (locationName: string, useMockData: boolean) => {
   const getLocationDetails = useCallback((position: GeolocationPosition) => {
     axios
       .get(
-        useMockData
-          ? './mock-data/locality.json'
-          : `${geocodeBaseUrl}?latlng=${position.coords.latitude},${position.coords.longitude}&result_type=locality&key=${apiKey}`,
+        `${geocodeBaseUrl}?latlng=${position.coords.latitude},${position.coords.longitude}&result_type=locality&key=${apiKey}`,
       )
       .then((res: any) => {
         if (res.data && res.data.results[0]) {
@@ -37,11 +35,7 @@ export const useLocation = (locationName: string, useMockData: boolean) => {
   const getCoordsByLocationName = useCallback(
     (locationName: string) => {
       axios
-        .get(
-          useMockData
-            ? './mock-data/latlong.json'
-            : `${geocodeBaseUrl}?address=${locationName}&key=${apiKey}`,
-        )
+        .get(`${geocodeBaseUrl}?address=${locationName}&key=${apiKey}`)
         .then((res: any) => {
           if (res.data && res.data.results[0]) {
             const location = res.data.results[0].geometry.location
@@ -60,7 +54,7 @@ export const useLocation = (locationName: string, useMockData: boolean) => {
           handleError(error)
         })
     },
-    [apiKey, geocodeBaseUrl, useMockData],
+    [apiKey, geocodeBaseUrl],
   )
 
   useEffect(() => {
