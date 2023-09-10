@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Header from '../Header'
 import Loading from '../common/Loading'
 import './container.scss'
-import { EmptyCurrentWeather, SettingsModel } from '../../models'
+import { CurrentWeatherModel, EmptyCurrentWeather, SettingsModel } from '../../models'
 import { useWeather } from '../../hooks/useWeather'
+import CurrentWeather from '../CurrentWeather'
 
 type ContainerProps = {
   settings: SettingsModel
@@ -22,9 +23,18 @@ const Container = ({ settings, changeSettings }: ContainerProps) => {
     useMockData,
   )
 
+  useEffect(() => {
+    setCurrentWeatherSelectedItem(currentWeather)
+  }, [currentWeather])
+
+  const hourlyItemClickHandler = (current: CurrentWeatherModel) => {
+    setCurrentWeatherSelectedItem(current)
+  }
+
   const changeLocationHandler = (location: string) => {
     setCurrentLocationName(location)
   }
+
   return (
     <div className='container'>
       <Loading isLoading={false}>
@@ -37,6 +47,7 @@ const Container = ({ settings, changeSettings }: ContainerProps) => {
             changeSettings={changeSettings}
             changeLocation={changeLocationHandler}
           />
+          <CurrentWeather settings={settings} data={currentWeatherSelectedItem} />
         </div>
       </Loading>
     </div>
