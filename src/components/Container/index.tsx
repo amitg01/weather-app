@@ -6,6 +6,7 @@ import './container.scss'
 import { CurrentWeatherModel, EmptyCurrentWeather, SettingsModel } from '../../models'
 import { useWeather } from '../../hooks/useWeather'
 import CurrentWeather from '../CurrentWeather'
+import CurrentWeatherDetails from '../CurrentWeatherDetails'
 
 type ContainerProps = {
   settings: SettingsModel
@@ -48,6 +49,7 @@ const Container = ({ settings, changeSettings }: ContainerProps) => {
             changeLocation={changeLocationHandler}
           />
           <CurrentWeather settings={settings} data={currentWeatherSelectedItem} />
+          <CurrentWeatherDetails data={currentWeatherSelectedItem.details} />
         </div>
       </Loading>
     </div>

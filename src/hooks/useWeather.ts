@@ -24,7 +24,6 @@ export const useWeather = (locationName: string, unit: string, useMockData: bool
   const handleError = (e: any) => console.error(e)
 
   useEffect(() => {
-    console.log({ unit, useMockData, baseUrl, apiKey, handleError })
     setIsLoading(true)
     if (location) {
       const url = useMockData
@@ -33,9 +32,10 @@ export const useWeather = (locationName: string, unit: string, useMockData: bool
       axios
         .get(url)
         .then((response) => {
-          setCurrent(response.data.current)
-          setHourly(response.data.hourly)
-          setDaily(response.data.daily)
+          const { current, hourly, daily, timezone_offset } = response.data
+          setCurrent(current, timezone_offset)
+          setHourly(hourly, timezone_offset)
+          setDaily(daily)
         })
         .catch((error) => {
           handleError(error)
@@ -44,9 +44,9 @@ export const useWeather = (locationName: string, unit: string, useMockData: bool
           setTimeout(() => setIsLoading(false), 100)
         })
     }
-  }, [unit, useMockData, baseUrl, apiKey])
+  }, [unit, useMockData, baseUrl, apiKey, location])
 
-  const setCurrent = (data: any) => {
+  const setCurrent = (data: any, offset: number) => {
     setCurrentWeather({
       dt: data.dt,
       weather: {
@@ -55,6 +55,7 @@ export const useWeather = (locationName: string, unit: string, useMockData: bool
       },
       temp: data.temp,
       feels_like: data.feels_like,
+      timezone_offset: offset,
       details: {
         rain: 0,
         visibility: data.visibility / 1000,
@@ -65,7 +66,7 @@ export const useWeather = (locationName: string, unit: string, useMockData: bool
     })
   }
 
-  const setHourly = (data: any) => {
+  const setHourly = (data: any, offset: number) => {
     let hourly: CurrentWeatherModel[] = []
     data.slice(0, 24).forEach((item: any) => {
       hourly.push({
@@ -76,6 +77,7 @@ export const useWeather = (locationName: string, unit: string, useMockData: bool
         },
         temp: item.temp,
         feels_like: item.feels_like,
+        timezone_offset: offset,
         details: {
           rain: item.pop * 100,
           visibility: item.visibility / 1000,
